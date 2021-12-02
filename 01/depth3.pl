@@ -1,13 +1,14 @@
 #!/usr/bin/perl
+
+use strict;
+use warnings;
+
 use List::Util qw( sum );
 
 my @prev;
 my $count = 0;
 
 while ( <STDIN> ) {
-    chomp;
-    int;
-
     if ( scalar @prev < 3 ) {
         push @prev, $_;
         next;
@@ -18,9 +19,7 @@ while ( <STDIN> ) {
     my $sum_0 = sum( @prev[0..2] );
     my $sum_1 = sum( @prev[1..3] );
 
-    if ( $sum_1 > $sum_0) {
-        ++$count;
-    }
+    ++$count if $sum_1 > $sum_0;
 
     shift @prev;
 }
