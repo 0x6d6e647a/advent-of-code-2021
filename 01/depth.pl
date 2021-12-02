@@ -1,20 +1,18 @@
 #!/usr/bin/perl
 
+use strict;
+use warnings;
+
 my $prev = undef;
 my $count = 0;
 
 while ( <STDIN> ) {
-    chomp;
-    int;
-
     if ( ! defined $prev ) {
         $prev = $_;
         next;
     }
 
-    if ( $_ > $prev) {
-        ++$count;
-    }
+    ++$count if $_ > $prev;
 
     $prev = $_;
 }
