@@ -29,7 +29,7 @@ foreach (@bit_fields) {
     }
 }
 
-$gamma = eval '0b' . $gamma;
-$epsilon = eval '0b' . $epsilon;
+$gamma = oct( '0b' . $gamma );
+$epsilon = oct( '0b' . $epsilon );
 
 print $gamma * $epsilon . "\n";

@@ -88,7 +88,7 @@ for my $bit_index ( 0 .. $bit_width - 1 ) {
     last if (scalar @o2 == 1 && scalar @co2 == 1);
 }
 
-my $o2_fin = eval '0b' . $o2[0];
-my $co2_fin = eval '0b' . $co2[0];
+my $o2_fin = oct( '0b' . $o2[0] );
+my $co2_fin = oct( '0b' . $co2[0] );
 
 print $o2_fin * $co2_fin . "\n";
