@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 
-use Data::Dumper qw( Dumper );
-
 my @draws = split /,/, <STDIN>;
 
 <STDIN>;
