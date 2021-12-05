@@ -17,10 +17,7 @@ my $gamma = '';
 my $epsilon = '';
 
 foreach (@bit_fields) {
-    my $num0 = $_->{'0'};
-    my $num1 = $_->{'1'};
-
-    if ( $num0 > $num1 ) {
+    if ( $_->{'0'} > $_->{'1'} ) {
         $gamma   .= '0';
         $epsilon .= '1';
     } else {
@@ -29,7 +26,4 @@ foreach (@bit_fields) {
     }
 }
 
-$gamma = oct( '0b' . $gamma );
-$epsilon = oct( '0b' . $epsilon );
-
-print $gamma * $epsilon . "\n";
+print oct( '0b' . $gamma ) * oct( '0b' . $epsilon ) . "\n";

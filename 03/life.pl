@@ -12,38 +12,23 @@ while ( <STDIN> ) {
     push @co2, $_;
 }
 
-my $bit_width = length $o2[0];
-
-for my $bit_index ( 0 .. $bit_width - 1 ) {
+for my $bit_index ( 0 .. length $o2[0] - 1 ) {
     if ( scalar @o2 > 1 ) {
-        my $o2_num0  = 0;
-        my $o2_num1  = 0;
+        my $o2_num0 = 0;
+        my $o2_num1 = 0;
 
-        foreach my $o2_val ( @o2 ) {
-            my $val = substr($o2_val, $bit_index, 1);
-
-            if ( $val eq '0' ) {
-                $o2_num0 += 1;
-            } elsif ( $val eq '1' ) {
-                $o2_num1 += 1;
-            }
+        foreach ( @o2 ) {
+            my $val = substr($_, $bit_index, 1);
+            $val == 0 ? ++$o2_num0 : ++$o2_num1;
         }
 
-        my $o2_target = undef;
-
-        if ( $o2_num0 > $o2_num1 ) {
-            $o2_target = 0;
-        } elsif ( $o2_num0 < $o2_num1 ) {
-            $o2_target = 1;
-        } else {
-            $o2_target = 1;
-        }
+        my $o2_target = $o2_num0 > $o2_num1 ? 0 : 1;
 
         my @o2_new;
 
-        foreach my $o2_val (@o2) {
-            if ( substr($o2_val, $bit_index, 1) == $o2_target ) {
-                push @o2_new, $o2_val;
+        foreach (@o2) {
+            if ( substr($_, $bit_index, 1) == $o2_target ) {
+                push @o2_new, $_;
             }
         }
 
@@ -54,31 +39,18 @@ for my $bit_index ( 0 .. $bit_width - 1 ) {
         my $co2_num0 = 0;
         my $co2_num1 = 0;
 
-        foreach my $co2_val ( @co2 ) {
-            my $val = substr($co2_val, $bit_index, 1);
-
-            if ( $val eq '0' ) {
-                $co2_num0 += 1;
-            } elsif ( $val eq '1' ) {
-                $co2_num1 += 1;
-            }
+        foreach ( @co2 ) {
+            my $val = substr($_, $bit_index, 1);
+            $val == 0 ? ++$co2_num0 : ++$co2_num1;
         }
 
-        my $co2_target = undef;
-
-        if ( $co2_num0 > $co2_num1 ) {
-            $co2_target = 1;
-        } elsif ( $co2_num0 < $co2_num1 ) {
-            $co2_target = 0;
-        } else {
-            $co2_target = 0;
-        }
+        my $co2_target =  $co2_num0 > $co2_num1 ? 1 : 0;
 
         my @co2_new;
 
-        foreach my $co2_val (@co2) {
-            if ( substr($co2_val, $bit_index, 1) == $co2_target ) {
-                push @co2_new, $co2_val;
+        foreach (@co2) {
+            if ( substr($_, $bit_index, 1) == $co2_target ) {
+                push @co2_new, $_;
             }
         }
 
@@ -88,7 +60,4 @@ for my $bit_index ( 0 .. $bit_width - 1 ) {
     last if (scalar @o2 == 1 && scalar @co2 == 1);
 }
 
-my $o2_fin = oct( '0b' . $o2[0] );
-my $co2_fin = oct( '0b' . $co2[0] );
-
-print $o2_fin * $co2_fin . "\n";
+print oct( '0b' . $o2[0] ) * oct( '0b' . $co2[0] ) . "\n";
