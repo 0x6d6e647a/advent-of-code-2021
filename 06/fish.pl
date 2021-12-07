@@ -3,21 +3,17 @@
 use strict;
 use warnings;
 
-my @fishes = split /,/, <STDIN>;
+use List::Util qw( sum );
 
-for ( 1 .. 80 ) {
-    my @new_fishes;
+my @f = (0) x 9;
 
-    foreach ( @fishes ) {
-        if ( $_ == 0 ) {
-            push @new_fishes, 8;
-            $_ = 6;
-        } else {
-            --$_;
-        }
-    }
-
-    push @fishes, @new_fishes;
+foreach ( split /,/, <STDIN> ) {
+    ++$f[$_];
 }
 
-print scalar @fishes . "\n";
+for ( 1 .. 80 ) {
+    push(@f, (shift(@f)));
+    $f[6] += $f[8];
+}
+
+print sum( @f ) . "\n";
