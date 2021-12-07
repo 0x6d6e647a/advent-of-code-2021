@@ -5,26 +5,15 @@ use warnings;
 
 use List::Util qw( sum );
 
-my %fishes;
+my @f = (0) x 9;
 
 foreach ( split /,/, <STDIN> ) {
-    ++$fishes{$_};
+    ++$f[$_];
 }
 
 for ( 1 .. 256 ) {
-    my %new_fishes;
-
-    foreach ( keys %fishes ) {
-        if ( $_ == 0 ) {
-            $new_fishes{8} += $fishes{$_};
-            $new_fishes{6} += $fishes{$_};
-
-        } else {
-            $new_fishes{$_ - 1} += $fishes{$_};
-        }
-    }
-
-    %fishes = %new_fishes;
+    push(@f, (shift(@f)));
+    $f[6] += $f[8];
 }
 
-print sum(values %fishes) . "\n";
+print sum( @f ) . "\n";
