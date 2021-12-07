@@ -12,7 +12,7 @@ foreach ( split /,/, <STDIN> ) {
 }
 
 for ( 1 .. 256 ) {
-    push(@f, (shift(@f)));
+    push @f, shift @f;
     $f[6] += $f[8];
 }
 

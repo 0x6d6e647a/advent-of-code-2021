@@ -21,5 +21,4 @@ while ( <STDIN> ) {
     }
 }
 
-my $result = $hoz * $depth;
-print "$result\n";
+print $hoz * $depth . "\n";
