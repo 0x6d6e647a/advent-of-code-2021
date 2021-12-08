@@ -27,12 +27,12 @@ sub decode {
     my @digits  = @{$entry->{'digits'}};
 
     my @d = (undef) x 10;
-    $d[1] = (grep { length $_ == 2 } @signals)[0];
-    $d[4] = (grep { length $_ == 4 } @signals)[0];
-    $d[7] = (grep { length $_ == 3 } @signals)[0];
-    $d[8] = (grep { length $_ == 7 } @signals)[0];
+    $d[1] = first { length $_ == 2 } @signals;
+    $d[4] = first { length $_ == 4 } @signals;
+    $d[7] = first { length $_ == 3 } @signals;
+    $d[8] = first { length $_ == 7 } @signals;
 
-    my %s = ( a => (grep { index($d[1], $_) == -1 } split //, $d[7])[0] );
+    my %s = ( a => first { index($d[1], $_) == -1 } split //, $d[7] );
 
     foreach my $char ( split //, 'abcdefg' ) {
         my $count = grep { index($_, $char) >= 0 } @signals;
@@ -52,31 +52,35 @@ sub decode {
     }
 
     foreach my $sig ( @signals ) {
+        my $chkfn = sub { index($sig, shift) != -1 };
+
         if ( length $sig == 5 ) {
-            if ( all { index($sig, $_) != -1 } ($s{a}, $s{c}, $s{d}, $s{e}, $s{g}) ) {
+            if ( all { $chkfn->($_) } ($s{a}, $s{c}, $s{d}, $s{e}, $s{g}) ) {
                 $d[2] = $sig;
-            } elsif ( all { index($sig, $_) != -1 } ($s{a}, $s{c}, $s{d}, $s{f}, $s{g}) ) {
+            } elsif ( all { $chkfn->($_) } ($s{a}, $s{c}, $s{d}, $s{f}, $s{g}) ) {
                 $d[3] = $sig;
-            } elsif ( all { index($sig, $_) != -1 } ($s{a}, $s{b}, $s{d}, $s{f}, $s{g}) ) {
+            } elsif ( all { $chkfn->($_) } ($s{a}, $s{b}, $s{d}, $s{f}, $s{g}) ) {
                 $d[5] = $sig;
             }
         } elsif ( length $sig == 6 ) {
-            if ( all { index($sig, $_) != -1 } ($s{a}, $s{b}, $s{c}, $s{e}, $s{f}, $s{g}) ) {
+            if ( all { $chkfn->($_) } ($s{a}, $s{b}, $s{c}, $s{e}, $s{f}, $s{g}) ) {
                 $d[0] = $sig;
-            } elsif ( all { index($sig, $_) != -1 } ($s{a}, $s{b}, $s{d}, $s{e}, $s{f}, $s{g}) ) {
+            } elsif ( all { $chkfn->($_) } ($s{a}, $s{b}, $s{d}, $s{e}, $s{f}, $s{g}) ) {
                 $d[6] = $sig;
-            } elsif ( all { index($sig, $_) != -1 } ($s{a}, $s{b}, $s{c}, $s{d}, $s{f}, $s{g}) ) {
+            } elsif ( all { $chkfn->($_) } ($s{a}, $s{b}, $s{c}, $s{d}, $s{f}, $s{g}) ) {
                 $d[9] = $sig;
             }
         }
     }
 
-    @d = map { join '', sort split //, $_ } @d;
+    my $sortchars = sub { join '', sort split //, shift };
+
+    @d = map { $sortchars->($_) } @d;
 
     my $result;
 
     foreach my $digit ( @digits ) {
-        $digit = join '', sort split //, $digit;
+        $digit = $sortchars->($digit);
         $result .= first { $d[$_] eq $digit } 0 .. $#d;
     }
 
