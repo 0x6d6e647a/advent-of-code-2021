@@ -72,7 +72,7 @@ sub do_step {
             push @do_flash, $_ if $_->{lvl} > 9;
         }
 
-        $entry->{lvl} = -1 * ('inf' - 1);
+        $entry->{lvl} = -1 * 'inf';
         push @did_flashes, $entry;
     }
 
