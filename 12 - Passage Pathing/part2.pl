@@ -16,10 +16,10 @@ while ( <STDIN> ) {
 
 my $paths;
 
-my @s = ( [ 'start' ] );
+my @s = ( [ {}, [ 'start' ] ] );
 
 while ( @s ) {
-    my $curr_path = pop @s;
+    my ($checker, $curr_path) = @{pop @s};
     my $vertex = $curr_path->[$#$curr_path];
 
     if ( $vertex eq 'end' ) {
@@ -27,26 +27,18 @@ while ( @s ) {
         next;
     }
 
-    if ( ( ( scalar grep { $vertex eq $_ } @$curr_path[ 0 .. $#$curr_path - 1 ] ) <= 1 )
-        || ( $vertex =~ qr/^[A-Z]+$/ )) {
+    if ( ( ( $checker->{$vertex} // 0 ) <= 2 )
+        || ( $vertex =~ qr/^[A-Z]+$/ ) ) {
         foreach my $next_vertex ( @{$nodes{$vertex}} ) {
             next if $next_vertex eq 'start';
 
-            my %checker;
+            my %new_checker = %$checker;
+            ++$new_checker{$next_vertex} if ( ( $next_vertex !~ qr/^[A-Z]+$/ ) &&
+                                              ( $next_vertex ne 'end' ) );
 
-            foreach ( @$curr_path ) {
-                next if $_ eq 'start';
-                next if $_ eq 'end';
-                next if $_ =~ qr/^[A-Z]+$/;
-                ++$checker{$_};
-            }
+            next if ( scalar grep { $new_checker{$_} > 1 } keys %new_checker ) > 1;
 
-            ++$checker{$next_vertex};
-
-            my $num_small_over = scalar grep { $checker{$_} > 1 } keys %checker;
-            next if $num_small_over > 1;
-
-            push @s, [ @$curr_path, $next_vertex ];
+            push @s, [ \%new_checker, [ @$curr_path, $next_vertex ] ];
         }
     }
 }
