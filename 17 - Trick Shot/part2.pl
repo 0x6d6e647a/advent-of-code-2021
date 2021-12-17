@@ -14,7 +14,7 @@ sub fire_probe {
     my @positions = ( [0,0] );
     my $hit = 0;
 
-    while () {
+    while ( @positions ) {
         my ($x, $y) = @{$positions[$#positions]};
 
         $x += $x_vel;
